@@ -1,20 +1,33 @@
-module.exports = (sequelize:any, DataTypes:any) => {
-  const userTable = sequelize.define('User', {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-    },
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    role: DataTypes.STRING,
-    password: DataTypes.STRING,
+import {
+  DataTypes,
+  Model,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize';
+import db from '.';
 
-  }, {
-    timestamps: false,
-    modelName: 'users',
-    tableName: 'users',
-  });
-  return userTable;
-};
+class UserModel extends Model<InferAttributes<UserModel>,
+InferCreationAttributes<UserModel>> {
+  declare id: CreationOptional<number>;
+  declare userName :string;
+}
+UserModel.init({
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  userName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  sequelize: db,
+  underscored: true,
+  modelName: 'teams',
+  timestamps: false,
+});
+
+export default UserModel;
