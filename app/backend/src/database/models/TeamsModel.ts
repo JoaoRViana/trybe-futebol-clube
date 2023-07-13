@@ -6,7 +6,6 @@ import {
   CreationOptional,
 } from 'sequelize';
 import db from '.';
-import Matches from './Matches';
 
 class TeamsModel extends Model<InferAttributes<TeamsModel>,
 InferCreationAttributes<TeamsModel>> {
@@ -21,16 +20,14 @@ TeamsModel.init({
     primaryKey: true,
     autoIncrement: true,
   },
-  teamName:{
-    type:DataTypes.STRING,
-    allowNull:false,
-  }
+  teamName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   sequelize: db,
   modelName: 'teams',
   timestamps: false,
 });
-TeamsModel.hasMany(Matches,{foreignKey:'id',as:'awayTeamId'})
-TeamsModel.hasMany(Matches,{foreignKey:'id',as:'homeTeamId'})
 
 export default TeamsModel;
