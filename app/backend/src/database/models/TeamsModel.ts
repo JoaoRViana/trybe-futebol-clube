@@ -14,7 +14,6 @@ InferCreationAttributes<TeamsModel>> {
 
   declare teamName :string;
 }
-
 TeamsModel.init({
   id: {
     type: DataTypes.INTEGER,

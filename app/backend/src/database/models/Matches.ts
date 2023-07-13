@@ -7,7 +7,7 @@ import {
 } from 'sequelize';
 import db from '.';
 import TeamsModel from './TeamsModel';
-
+.
 class Matches extends Model<InferAttributes<Matches>,
 InferCreationAttributes<Matches>> {
   declare id: CreationOptional<number>;

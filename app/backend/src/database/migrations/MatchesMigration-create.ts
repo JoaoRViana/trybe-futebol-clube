@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       in_progress:{
-        type: Sequelize.BOOL
+        type: Sequelize.BOOLEAN
       }
     });
   },
