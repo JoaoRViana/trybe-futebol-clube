@@ -11,4 +11,13 @@ export default class LoginController {
     }
     return res.status(200).json({ token: message });
   }
+
+  public async getRole(req:Request, res:Response) {
+    const { authorization: token } = req.headers;
+    const { type, message } = await this.loginService.getRole(token);
+    if (type) {
+      return res.status(type).json({ message });
+    }
+    return res.status(200).json({ role: message });
+  }
 }

@@ -1,12 +1,11 @@
 import { compareSync } from 'bcryptjs';
-import { tokensign } from './jwt';
+import { tokensign, tokenverify } from './jwt';
 import UserModel from '../database/models/UsersModel';
 
 const invalid = 'Invalid email or password';
 
 export default class LoginService {
   private usermodel = UserModel;
-
   public async validateUser(user:any) {
     if (!user.email || !user.password) {
       return { type: 400, message: 'All fields must be filled' };
@@ -31,5 +30,25 @@ export default class LoginService {
     const payload = { id: valUser.id, username: valUser.userName };
     const token = tokensign(payload);
     return { type: null, message: token };
+  }
+
+  public async getRole(token:any) {
+    if (!token) {
+      return { type: 401, message: 'Token not found' };
+    }
+    try {
+      const notBearer = token.split(' ');
+      const valToken = tokenverify(notBearer[1]);
+      if (!valToken) {
+        return { type: 401, message: 'Token must be a valid token' };
+      }
+      const user = await this.usermodel.findOne({ where: { userName: valToken.username } });
+      if (!user) {
+        return { type: 401, message: 'F' };
+      }
+      return { type: null, message: user.role };
+    } catch (error:any) {
+      return { type: 401, message: 'Token must be a valid token' };
+    }
   }
 }
