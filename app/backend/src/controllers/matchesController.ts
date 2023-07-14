@@ -5,7 +5,8 @@ export default class MatchesController {
   private matchesService = new MatchesService();
 
   public async getAllMatches(req:Request, res:Response) {
-    const teams = await this.matchesService.getMatches();
+    const searchTerm = req.query;
+    const teams = await this.matchesService.getMatches(searchTerm);
     return res.status(200).json(teams);
   }
 }
