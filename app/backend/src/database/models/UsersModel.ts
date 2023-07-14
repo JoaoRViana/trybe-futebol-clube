@@ -11,6 +11,9 @@ class UserModel extends Model<InferAttributes<UserModel>,
 InferCreationAttributes<UserModel>> {
   declare id: CreationOptional<number>;
   declare userName :string;
+  declare role :string;
+  declare email :string;
+  declare password :string;
 }
 UserModel.init({
   id: {
@@ -23,10 +26,19 @@ UserModel.init({
     type: DataTypes.STRING,
     allowNull: false,
   },
+  role: {
+    type: DataTypes.STRING,
+  },
+  password: {
+    type: DataTypes.STRING,
+  },
+  email: {
+    type: DataTypes.STRING,
+  },
 }, {
   sequelize: db,
-  underscored: true,
-  modelName: 'teams',
+  underscored: false,
+  modelName: 'users',
   timestamps: false,
 });
 
