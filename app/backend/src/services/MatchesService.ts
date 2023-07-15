@@ -1,5 +1,6 @@
 import Matches from '../database/models/MatchesModel';
 import TeamsModel from '../database/models/TeamsModel';
+import { tokenverify } from './jwt';
 
 export default class MatchesService {
   private matchesModel = Matches;
@@ -25,5 +26,42 @@ export default class MatchesService {
       return match;
     }));
     return result;
+  }
+
+  public async setMatch(token:string | undefined, id:number):Promise<any> {
+    if (!token) {
+      return { type: 401, message: 'Token not found' };
+    }
+    try {
+      const notBearer = token.split(' ');
+      tokenverify(notBearer[1]);
+      const result = await this.matchesModel.findByPk(id);
+      result?.set({ inProgress: false });
+      await result?.save();
+      return { type: 200, message: 'Finished' };
+    } catch (error) {
+      return { type: 401, message: 'Token must be a valid token' };
+    }
+  }
+
+  public async updateMatches(
+    token:string | undefined,
+    id:number,
+    homeTeamGoals:number,
+    awayTeamGoals:number,
+  ):Promise<any> {
+    if (!token) {
+      return { type: 401, message: 'Token not found' };
+    }
+    try {
+      const notBearer = token.split(' ');
+      tokenverify(notBearer[1]);
+      const result = await this.matchesModel.findByPk(id);
+      result?.set({ homeTeamGoals, awayTeamGoals });
+      await result?.save();
+      return { type: 200, message: 'Finished' };
+    } catch (error) {
+      return { type: 401, message: 'Token must be a valid token' };
+    }
   }
 }

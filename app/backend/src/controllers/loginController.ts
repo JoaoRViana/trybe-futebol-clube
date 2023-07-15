@@ -18,6 +18,6 @@ export default class LoginController {
     if (type) {
       return res.status(type).json({ message });
     }
-    return res.status(200).json({ role: token });
+    return res.status(200).json({ role: message });
   }
 }
