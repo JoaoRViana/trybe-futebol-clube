@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Matches from '../database/models/MatchesModel';
 import TeamsModel from '../database/models/TeamsModel';
 import { EmptyObj } from './jwt';
@@ -31,6 +32,26 @@ export default class LeaderService {
         { where: { [`${mainTeam}Id`]: e.dataValues.id, inProgress: false } },
       );
       const array = matches.map((f) => aux(f.dataValues, mainTeam, enemyTeam));
+      const result = LeaderService.getResults(array, e.dataValues.teamName);
+      result.goalsBalance = (result.goalsFavor - result.goalsOwn);
+      result.efficiency = ((result.totalPoints / (result.totalGames * 3)) * 100).toFixed(2);
+      return result;
+    }));
+    const sortedTeams = LeaderService.sortedTeams(await scores);
+    return sortedTeams;
+  }
+
+  public async getFullScore() {
+    const allTeams = await this.teamsModel.findAll();
+    const scores = Promise.all(allTeams.map(async (e) => {
+      const matches = await this.matchesModel.findAll({
+        where: { [Op.or]: [
+          { homeTeamId: e.dataValues.id, inProgress: false },
+          { awayTeamId: e.dataValues.id, inProgress: false }],
+        },
+      });
+      const array = matches.map((f) => (+f.dataValues.homeTeamId === +e.dataValues.id
+        ? aux(f.dataValues, 'homeTeam', 'awayTeam') : aux(f.dataValues, 'awayTeam', 'homeTeam')));
       const result = LeaderService.getResults(array, e.dataValues.teamName);
       result.goalsBalance = (result.goalsFavor - result.goalsOwn);
       result.efficiency = ((result.totalPoints / (result.totalGames * 3)) * 100).toFixed(2);

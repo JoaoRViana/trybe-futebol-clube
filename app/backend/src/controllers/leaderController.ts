@@ -12,4 +12,9 @@ export default class LeaderController {
     const message = await this.leaderServices.getScores('awayTeam', 'homeTeam');
     return res.status(200).json(message);
   }
+
+  public async fullScore(req:Request, res:Response) {
+    const message = await this.leaderServices.getFullScore();
+    return res.status(200).json(message);
+  }
 }
