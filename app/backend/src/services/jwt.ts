@@ -17,7 +17,22 @@ function tokenverify(token: string): TokenPayload {
   return decoded;
 }
 
+class EmptyObj {
+  public _obj = {
+    totalPoints: 0,
+    totalGames: 0,
+    totalVictories: 0,
+    totalDraws: 0,
+    totalLosses: 0,
+    goalsFavor: 0,
+    goalsOwn: 0 };
+
+  get obj() {
+    return this._obj;
+  }
+}
 export {
+  EmptyObj,
   tokensign,
   tokenverify,
 };
