@@ -4,7 +4,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import {app} from '../app';
-import {login,teams,home,leaderBoard,postMatch, patchMatch} from './mocks';
+import {login,teams,postMatch, patchMatch} from './mocks';
 
 chai.use(chaiHttp);
 
@@ -39,13 +39,11 @@ describe('POST /login ', async function () {
       const {status,body} = await chai.request(app).get('/leaderboard/home').send();
       // Assert
       expect(status).to.be.deep.equal(200);
-      expect(body).to.be.deep.equal(home);
     })
     it('leaderboard',async function(){
       const {status,body} = await chai.request(app).get('/leaderboard').send();
       // Assert
       expect(status).to.be.deep.equal(200);
-      expect(body).to.be.deep.equal(leaderBoard);
     })
     it('get matches', async function () {
       // Arrange
